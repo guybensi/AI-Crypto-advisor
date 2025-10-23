@@ -1,36 +1,22 @@
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-import LoginPage from './pages/LoginPage'
-import SignupPage from './pages/SignupPage'
-import OnboardingPage from './pages/OnboardingPage'
-import DashboardPage from './pages/DashboardPage'
-import { getEmail, setAuth } from './utils/jwtStorage'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import Login from './pages/Login'
+import Signup from './pages/SignupPage'
+import OnboardingStep1 from './pages/OnboardingStep1'
+import OnboardingStep2 from './pages/OnboardingStep2'
+import OnboardingStep3 from './pages/OnboardingStep3'
+import Dashboard from './pages/DashboardPage'
 
-/**
- * Root Application component.
- * Provides simple navigation and routes.
- */
 export default function App() {
-  const navigate = useNavigate()
-  const email = getEmail()
-
   return (
-    <div style={{ maxWidth: 960, margin: '0 auto', padding: 16 }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>AI Crypto Advisor</h1>
-        <nav>
-          <Link to="/" style={{ marginRight: 12 }}>Dashboard</Link>
-          {!email && <Link to="/login" style={{ marginRight: 12 }}>Login</Link>}
-          {!email && <Link to="/signup">Signup</Link>}
-          {email && <button onClick={() => { setAuth(null); navigate('/login'); }}>Logout</button>}
-        </nav>
-      </header>
-
-      <Routes>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/onboarding" element={<OnboardingPage />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="/login" element={<Login/>} />
+      <Route path="/signup" element={<Signup/>} />
+      <Route path="/onboarding/1" element={<OnboardingStep1/>} />
+      <Route path="/onboarding/2" element={<OnboardingStep2/>} />
+      <Route path="/onboarding/3" element={<OnboardingStep3/>} />
+      <Route path="/dashboard" element={<Dashboard/>} />
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   )
 }

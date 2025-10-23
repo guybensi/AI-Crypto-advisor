@@ -1,11 +1,7 @@
-import { http } from './http'
-import { getEmail } from '../utils/jwtStorage'
+import { httpSend, currentEmail } from './http'
+import type { Section } from './types'
 
-export async function sendFeedback(section: string, contentId: string, vote: number) {
-  const email = getEmail()
-  if (!email) throw new Error('Not logged in')
-  return http<void>(`/feedback?email=${encodeURIComponent(email)}`, {
-    method: 'POST',
-    body: JSON.stringify({ section, contentId, vote })
-  })
+export function sendFeedback(section: Section, contentId: string, value: 1|-1) {
+  const email = encodeURIComponent(currentEmail())
+  return httpSend(`/feedback?email=${email}`, 'POST', { section, contentId, vote: value })
 }

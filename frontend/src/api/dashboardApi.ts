@@ -1,12 +1,7 @@
-import { http } from './http'
-import { getEmail } from '../utils/jwtStorage'
+import { httpGet, currentEmail } from './http'
+import { DashboardDTO } from './types'
 
-export type NewsItem = { title: string, url: string, source: string, publishedAt: string }
-export type PriceItem = { symbol: string, priceUsd: number, change24hPct: number }
-export type Dashboard = { marketNews: NewsItem[], coinPrices: PriceItem[], aiInsight: string, memeUrl: string }
-
-export async function getDailyDashboard() {
-  const email = getEmail()
-  if (!email) throw new Error('Not logged in')
-  return http<Dashboard>(`/dashboard/daily?email=${encodeURIComponent(email)}`)
+export function getDailyDashboard(): Promise<DashboardDTO> {
+  const email = encodeURIComponent(currentEmail())
+  return httpGet<DashboardDTO>(`/dashboard/daily?email=${email}`)
 }

@@ -1,22 +1,56 @@
 /**
- * Minimal HTTP client wrapper using fetch.
- * Adds JSON headers and handles errors in a consistent way.
+ * Minimal HTTP client wrapper using fetch — backend expects some routes with ?email=
  */
 import { getAuth } from '../utils/jwtStorage'
 
-const BASE = 'http://localhost:8080'
+export const BASE =
+  (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:8080'
 
-export async function http<T>(path: string, opts: RequestInit = {}): Promise<T> {
+const EMAIL_KEY = 'email'
+export function currentEmail() {
+  return localStorage.getItem(EMAIL_KEY) || ''
+}
+
+function withEmail(path: string) {
+  const email = currentEmail()
+  if (!email) return path
+  const sep = path.includes('?') ? '&' : '?'
+  return `${path}${sep}email=${encodeURIComponent(email)}`
+}
+
+async function request<T>(
+  path: string,
+  opts: RequestInit = {},
+  attachEmail = false
+): Promise<T> {
   const auth = getAuth()
-  const headers = {
+  const headers: Record<string, string> = {
+    Accept: 'application/json',
     'Content-Type': 'application/json',
-    ...(auth?.token ? { 'Authorization': `Bearer ${auth.token}` } : {}),
-    ...(opts.headers || {}),
+    ...(auth?.token ? { Authorization: `Bearer ${auth.token}` } : {}),
+    ...(opts.headers as Record<string, string> | undefined),
   }
-  const res = await fetch(BASE + path, { ...opts, headers })
+
+  const url = BASE + (attachEmail ? withEmail(path) : path)
+  const res = await fetch(url, { ...opts, headers })
+
   if (!res.ok) {
-    const msg = await res.text()
+    let msg: string
+    try {
+      msg = await res.text()
+    } catch {
+      msg = res.statusText
+    }
     throw new Error(`HTTP ${res.status}: ${msg}`)
   }
-  return res.status === 204 ? (undefined as unknown as T) : await res.json()
+
+  // בטיפול בגוף ריק/204
+  const text = await res.text().catch(() => '')
+  return (text ? JSON.parse(text) : undefined) as T
 }
+
+/** Convenience wrappers */
+export const httpGet = <T>(path: string, attachEmail = false) =>
+  request<T>(path, { method: 'GET' }, attachEmail)
+
+export const http
