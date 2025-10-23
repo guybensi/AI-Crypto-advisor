@@ -1,6 +1,16 @@
 import Header from './_Header'
+import { useOnboarding } from '../utils/onboardingStore'
+import { useNavigate } from 'react-router-dom'
 
-export default function OnboardingStep2() {
+const options = [
+  ['💎','HODLER',"Long-term believer in crypto's future"],
+  ['📈','DAY_TRADER','Active trading and technical analysis'],
+  ['🎨','NFT_COLLECTOR','Digital art and collectibles'],
+] as const
+
+export default function OnboardingStep2(){
+  const { state, setState } = useOnboarding()
+  const nav = useNavigate()
   return (
     <div className="container">
       <Header />
@@ -14,23 +24,20 @@ export default function OnboardingStep2() {
         <p className="card-sub">Choose the one that fits you best</p>
 
         <div className="list" style={{marginTop:14}}>
-          {[
-            ['💎','HODLer',"Long-term believer in crypto's future"],
-            ['📈','Day Trader','Active trading and technical analysis'],
-            ['🎨','NFT Collector','Digital art and collectibles'],
-            ['🌾','DeFi Farmer','Yield farming and staking'],
-            ['🔎','Casual Explorer','Learning and exploring crypto'],
-          ].map(([icon,title,sub])=>(
-            <div key={String(title)} className="row-option" data-group="investor" tabIndex={0} aria-checked="false">
+          {options.map(([icon,value,sub])=>(
+            <div key={value}
+                 className="row-option" data-group="investor" tabIndex={0}
+                 aria-checked={state.investorType === value}
+                 onClick={()=>setState(s=>({...s, investorType: value as any}))}>
               <div className="icon">{icon}</div>
-              <div><div className="opt-title">{title}</div><div className="opt-sub">{sub as string}</div></div>
+              <div><div className="opt-title">{value.replace('_',' ')}</div><div className="opt-sub">{sub}</div></div>
             </div>
           ))}
         </div>
 
         <div className="actions">
           <a className="btn btn-ghost" href="/onboarding/1">Back</a>
-          <a className="btn btn-primary" href="/onboarding/3">Continue →</a>
+          <button className="btn btn-primary" onClick={()=>nav('/onboarding/3')}>Continue →</button>
         </div>
       </div>
     </div>

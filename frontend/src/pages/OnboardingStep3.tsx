@@ -1,8 +1,30 @@
 import Header from './_Header'
+import { useOnboarding } from '../utils/onboardingStore'
+import { useNavigate } from 'react-router-dom'
+import { savePreferences } from '../api/preferencesApi'
 
-const options = ['Market News','Price Charts','Social Sentiment','Fun Memes','Technical Analysis'] as const
+const opts = [
+  ['📰','Market News','MARKET_NEWS'],
+  ['📊','Price Charts','CHARTS'],
+  ['💬','Social Sentiment','SOCIAL'],
+  ['😄','Fun Memes','FUN'],
+] as const
 
-export default function OnboardingStep3() {
+export default function OnboardingStep3(){
+  const { state, setState } = useOnboarding()
+  const nav = useNavigate()
+
+  const toggle = (value:string)=> setState(s=>({
+    ...s, contentTypes: s.contentTypes.includes(value as any)
+      ? s.contentTypes.filter(x=>x!==value)
+      : [...s.contentTypes, value as any]
+  }))
+
+  async function finish() {
+    await savePreferences(state)
+    nav('/dashboard')
+  }
+
   return (
     <div className="container">
       <Header />
@@ -16,17 +38,20 @@ export default function OnboardingStep3() {
         <p className="card-sub">Select all that apply</p>
 
         <div className="grid cols-2" style={{marginTop:14}}>
-          {options.map((o)=>(
-            <div key={o} className="tile" data-toggle="multi" tabIndex={0} aria-checked="false">
-              <div className="badge">★</div>
-              <div className="title">{o}</div>
+          {opts.map(([icon,label,value])=>(
+            <div key={value}
+                 className={`tile ${state.contentTypes.includes(value as any)?'active':''}`}
+                 data-toggle="multi" tabIndex={0}
+                 aria-checked={state.contentTypes.includes(value as any)}
+                 onClick={()=>toggle(value)}>
+              <div className="badge">{icon}</div><div className="title">{label}</div>
             </div>
           ))}
         </div>
 
         <div className="actions">
           <a className="btn btn-ghost" href="/onboarding/2">Back</a>
-          <a className="btn btn-primary" href="/dashboard">Get Started →</a>
+          <button className="btn btn-primary" onClick={finish}>Get Started →</button>
         </div>
       </div>
     </div>

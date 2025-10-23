@@ -1,7 +1,5 @@
-import { httpSend, currentEmail } from './http'
+import { httpPost } from './http'
 import type { Section } from './types'
 
-export function sendFeedback(section: Section, contentId: string, value: 1|-1) {
-  const email = encodeURIComponent(currentEmail())
-  return httpSend(`/feedback?email=${email}`, 'POST', { section, contentId, vote: value })
-}
+export const sendFeedback = (section: Section, contentId: string, vote: 1|-1) =>
+  httpPost<{ ok: boolean }>('/feedback', { section, contentId, vote }, true) // ?email=

@@ -1,7 +1,5 @@
-import { httpGet, currentEmail } from './http'
-import { DashboardDTO } from './types'
+import { httpGet } from './http'
+import type { DashboardDTO } from './types'
 
-export function getDailyDashboard(): Promise<DashboardDTO> {
-  const email = encodeURIComponent(currentEmail())
-  return httpGet<DashboardDTO>(`/dashboard/daily?email=${email}`)
-}
+export const getDailyDashboard = () =>
+  httpGet<DashboardDTO>('/dashboard/daily', true) // ?email=

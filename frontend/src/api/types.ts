@@ -10,9 +10,9 @@ export interface DashboardDTO {
   memeUrl?: string | null
 }
 
-// בשביל ה־backend נשלח מחרוזות comma-separated, אבל ננהל כ־arrays בפרונט:
+// ViewModel לפרונט (נמיר למחרוזות לפני שליחה)
 export interface PreferencesVM {
-  assets: string[]                 // ["BTC","ETH",...]
+  assets: string[]
   investorType: 'HODLER' | 'DAY_TRADER' | 'NFT_COLLECTOR'
   contentTypes: Array<'MARKET_NEWS' | 'CHARTS' | 'SOCIAL' | 'FUN'>
 }

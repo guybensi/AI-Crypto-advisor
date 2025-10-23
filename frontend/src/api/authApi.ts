@@ -1,16 +1,16 @@
-import { httpSend } from './http'
+import { httpPost } from './http'
 import type { AuthResponse } from './types'
 
 export async function login(email: string, password: string) {
-  const res = await httpSend<AuthResponse>('/auth/login', 'POST', { email, password })
+  const res = await httpPost<AuthResponse>('/auth/login', { email, password })
   localStorage.setItem('token', res.token)
-  localStorage.setItem('email', res.email)      // 👈 נשתמש בזה לכל שאר הקריאות
+  localStorage.setItem('email', res.email)
   localStorage.setItem('name',  res.name)
   return res
 }
 
 export async function signup(name: string, email: string, password: string) {
-  const res = await httpSend<AuthResponse>('/auth/signup', 'POST', { name, email, password })
+  const res = await httpPost<AuthResponse>('/auth/signup', { name, email, password })
   localStorage.setItem('token', res.token)
   localStorage.setItem('email', res.email)
   localStorage.setItem('name',  res.name)

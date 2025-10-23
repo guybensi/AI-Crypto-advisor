@@ -1,4 +1,7 @@
-export default function Header({ title = 'Welcome to AI Crypto Advisor', subtitle = "Let's personalize your experience" }) {
+export default function Header({
+  title = 'Welcome to AI Crypto Advisor',
+  subtitle = "Let's personalize your experience",
+}: { title?: string; subtitle?: string }) {
   return (
     <div className="header-center">
       <img src="/src/assets/logo.svg" className="logo-badge" alt="logo" />
