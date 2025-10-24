@@ -87,3 +87,13 @@ p.subtitle{color:var(--muted);margin:0}
 .helper{color:var(--muted);font-size:12px;margin-top:4px}
 .link{color:#cfe0ff;text-decoration:none}
 .link:hover{text-decoration:underline}
+
+.vote button.active {
+  outline: 2px solid rgba(118, 86, 255, 0.9);
+  background: rgba(118, 86, 255, 0.15);
+}
+.vote button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+

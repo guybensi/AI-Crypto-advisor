@@ -2,6 +2,7 @@ C:\Users\guy19\Downloads\AI-Crypto-Advisor\backend\src\main\java\com\moveo\crypt
 C:\Users\guy19\Downloads\AI-Crypto-Advisor\backend\src\main\java\com\moveo\crypto\config\SecurityConfig.java
 C:\Users\guy19\Downloads\AI-Crypto-Advisor\backend\src\main\java\com\moveo\crypto\controller\AuthController.java
 C:\Users\guy19\Downloads\AI-Crypto-Advisor\backend\src\main\java\com\moveo\crypto\controller\DashboardController.java
+C:\Users\guy19\Downloads\AI-Crypto-Advisor\backend\src\main\java\com\moveo\crypto\controller\ExternalApiController.java
 C:\Users\guy19\Downloads\AI-Crypto-Advisor\backend\src\main\java\com\moveo\crypto\controller\FeedbackController.java
 C:\Users\guy19\Downloads\AI-Crypto-Advisor\backend\src\main\java\com\moveo\crypto\controller\OnboardingController.java
 C:\Users\guy19\Downloads\AI-Crypto-Advisor\backend\src\main\java\com\moveo\crypto\domain\ContentType.java

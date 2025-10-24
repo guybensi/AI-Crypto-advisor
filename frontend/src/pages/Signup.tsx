@@ -1,7 +1,11 @@
+// frontend/src/pages/SignupPage.tsx   ← שנה לשם הקובץ אצלך אם צריך
 import Header from './_Header'
 import { useState } from 'react'
 import { signup } from '../api/authApi'
 import { useNavigate, Link } from 'react-router-dom'
+
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/
+const passwordHint = 'Password must be at least 8 characters, include upper & lower case letters, a number and a symbol. Example: Aabcde12!'
 
 export default function Signup() {
   const nav = useNavigate()
@@ -13,10 +17,20 @@ export default function Signup() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setErr(null); setLoading(true)
-    try { await signup(name, email, password); nav('/onboarding/1') }
-    catch (e:any) { setErr(e.message || 'Signup failed') }
-    finally { setLoading(false) }
+    setErr(null)
+    if (!passwordRegex.test(password)) {
+      setErr(passwordHint)
+      return
+    }
+    setLoading(true)
+    try {
+      await signup(name, email, password)
+      nav('/onboarding/1')
+    } catch (e: any) {
+      setErr(e.message || 'Signup failed')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -36,7 +50,9 @@ export default function Signup() {
           <div className="form-row"><label>Email</label>
             <input className="input" type="email" value={email} onChange={e=>setEmail(e.target.value)} required /></div>
           <div className="form-row"><label>Password</label>
-            <input className="input" type="password" value={password} onChange={e=>setPassword(e.target.value)} required /></div>
+            <input className="input" type="password" value={password} onChange={e=>setPassword(e.target.value)} required />
+            <div className="helper">{passwordHint}</div>
+          </div>
 
           <div className="actions">
             <Link className="btn btn-ghost" to="/login">Back</Link>
