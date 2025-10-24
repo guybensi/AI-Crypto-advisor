@@ -4,7 +4,7 @@
 import { getAuth } from '../utils/jwtStorage'
 
 export const BASE =
-  (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:8080'
+  (import.meta.env.VITE_API_BASE_URL as string) || 'https://ai-crypto-backend.onrender.com'
 
 const EMAIL_KEY = 'email'
 export function currentEmail() {
